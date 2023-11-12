@@ -24,6 +24,18 @@ import { Comment } from 'src/app/core/models/comment.model';
       ]),
       transition('active => default', [
         animate('500ms ease-in-out')
+      ]),
+      transition(':enter', [
+        style({
+          transform: 'translateX(-100%)',
+          opacity:0,
+          'background-color': 'rgb(201,157,242)',
+        }),
+        animate('250ms ease-out', style({
+          transform: 'translateX(0)',
+          opacity: 1,
+          'background-color': 'white',
+        }))
       ])
     ])
   ]
@@ -51,6 +63,13 @@ export class CommentsComponent implements OnInit {
     if(this.commentCtrl.invalid) {
       return;
     }
+    const maxId = Math.max(...this.comments.map(comment => comment.id));
+    this.comments.unshift({
+      id: maxId + 1,
+      comment: this.commentCtrl.value,
+      createdDate: new Date().toString(),
+      userId: 1
+    })
     this.newComment.emit(this.commentCtrl.value);
     this.commentCtrl.reset();
   }
