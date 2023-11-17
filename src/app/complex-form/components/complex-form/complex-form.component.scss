@@ -7,10 +7,18 @@ mat-form-field {
     }
 }
 
+mat-card-title, mat-card-subtitle{
+    margin-left: 1em;
+    margin-right: 1em;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+}
+
 .form-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin: 1em;
 }
 
 .form-card {
