@@ -1,0 +1,39 @@
+.mdc-list-item {
+    display: flex;
+    flex-direction: row;
+    padding: 0.5em
+}
+
+.mdc-list-item__content span {
+    display: flex;
+}
+
+.mdc-list-item.mdc-list-item--with-one-line {
+    height: fit-content;
+}
+
+.mat-mdc-list-item-unscoped-content mdc-list-item__primary-text {
+    display: flex;
+
+}
+
+img {
+    border-radius: 50%;
+}
+
+.content-card {
+    display: flex;
+    align-items: center;
+}
+
+.infos {
+    padding-left: 1em;
+}
+
+.infos > * {
+    margin-bottom: 0;
+}
+
+.infos > h3 {
+    font-weight: bold;
+}
