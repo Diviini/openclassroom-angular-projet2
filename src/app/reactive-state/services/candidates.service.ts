@@ -1,6 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { BehaviorSubject, Observable, delay, map, take, tap } from "rxjs";
+import { BehaviorSubject, Observable, delay, map, switchMap, take, tap } from "rxjs";
 import { Candidate } from "../models/candidate.model";
 import { environment } from "src/environments/environment.development";
 
@@ -49,6 +49,37 @@ export class CandidatesService {
         )
     }
 
+    //Modification pessimiste : Safe
+    refuseCandidate(id: number): void {
+        this.setLoadingStatus(true);
+        this.http.delete(`${environment.apiUrl}/candidates/${id}`).pipe(
+            delay(1000),
+            switchMap(() => this.candidate$),
+            take(1),
+            map(candidates => candidates.filter(candidate => candidate.id !== id)),
+            tap(candidates => {
+                this._candidate$.next(candidates);
+                this.setLoadingStatus(false);
+            })
+        ).subscribe();
+    }
+
+    //Modification optimiste : Vite 
+    hireCandidate(id: number): void {
+        this.candidate$.pipe(
+            take(1),
+            map(candidates => candidates
+                .map(candidate  => candidate.id === id ? 
+                    {...candidate, company: 'Snapface Ltd'} : candidate
+                )
+            ),
+            tap(updatedCandidates => this._candidate$.next(updatedCandidates)),
+            delay(1000),
+            switchMap(updatedCandidates  => 
+                this.http.patch(`${environment.apiUrl}/candidates/${id}`,
+                 updatedCandidates.find(candidate => candidate.id === id)))
+        ).subscribe();
+    }
 
 
 }
